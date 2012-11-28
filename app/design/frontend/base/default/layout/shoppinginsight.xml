@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<layout version="0.1.0">
+    <catalog_product_view translate="label">
+        <reference name="content">
+            <block type="shoppinginsight/list" name="shoppinginsight_list" after="-" template="shoppinginsight/list.phtml"/>
+        </reference>    
+    </catalog_product_view>
+</layout>
+

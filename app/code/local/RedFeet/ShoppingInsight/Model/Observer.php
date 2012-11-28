@@ -18,11 +18,12 @@ class RedFeet_ShoppingInsight_Model_Observer extends Mage_Core_Model_Abstract{
             $track = Mage::getModel("shoppinginsight/track");
             $session = $this->getSessionData();
            
+            $track->getCountProductOrder(1);
+            
             $track->setVisitorId($session["visitor_id"]);
             $track->setProductId($product->getId());
             $track->setCustomerId($session["customer_id"]);
             $track->setQuoteId($cart->getId());
-            echo $cart->getId();
             $track->setUrlReferer($session["referer"]);
             try{
                 $track->save();

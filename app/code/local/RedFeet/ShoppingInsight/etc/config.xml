@@ -6,6 +6,11 @@
         </RedFeet_ShoppingInsight>
     </modules>
     <global>
+        <blocks>
+            <shoppinginsight>
+                <class>RedFeet_ShoppingInsight_Block</class>
+            </shoppinginsight>
+        </blocks>
 	<models>
             <shoppinginsight>
                 <class>RedFeet_ShoppingInsight_Model</class>
@@ -77,4 +82,13 @@
             </checkout_type_onepage_save_order_after>
         </events>
     </global>
+    <frontend>
+        <layout>
+            <updates>
+                <shoppinginsight>
+                    <file>shoppinginsight.xml</file>
+                </shoppinginsight>
+            </updates>
+        </layout>
+    </frontend>
 </config>
