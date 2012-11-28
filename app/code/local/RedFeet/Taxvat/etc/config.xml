@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <RedFeet_Taxvat>
+            <version>0.1.0</version>
+        </RedFeet_Taxvat>
+    </modules>
+    <global>
+	<models>
+	    <customer>
+		<rewrite>
+                    <form>RedFeet_Taxvat_Model_Form</form>
+		</rewrite>
+            </customer>
+	</models>
+    </global>
+</config>
