@@ -5,36 +5,69 @@ class RedFeet_ShoppingInsight_Model_Observer extends Mage_Core_Model_Abstract{
 //    }
     
     
+    /**
+     * 
+     * @param Varien_Event_Observer $observer
+     */
     public function addProductView(Varien_Event_Observer $observer){
         $product = $observer->getProduct();
         $customer = Mage::getSingleton("customer/session");
         if($customer->getId()){
             $cart = Mage::getModel('checkout/cart')->getQuote();
-            //print_r($cart->getId()); 
-            //die();
+            
             $track = Mage::getModel("shoppinginsight/track");
             $session = $this->getSessionData();
-            //print_r($track->load(19)->getData()); die();
            
             $track->setVisitorId($session["visitor_id"]);
             $track->setProductId($product->getId());
             $track->setCustomerId($session["customer_id"]);
+            $track->setQuoteId($cart->getId());
+            echo $cart->getId();
             $track->setUrlReferer($session["referer"]);
             try{
                 $track->save();
-                print_r($track->getData());
             }  catch (Exception $e){
 //                echo $e->getMessage(); die();
             }
 
         }
     }
-    
-    public function loginProcess(Varien_Event_Obeserver $observer){
-        $customer = $observer->getCustomer();
-        
+    /**
+     * 
+     * @param Varien_Event_Obeserver $observer
+     */
+    public function addOrderAfter(Varien_Event_Obeserver $observer){
+        try{
+            $order = $observer->getOrder();
+            $quote = $observer->getQuote();
+
+            $session = $this->getSessionData();
+
+            $items = $order->getAllItems();
+            foreach($items as $item){
+                $trackOrder = Mage::getModel("shoppinginsight/order");
+                $trackOrder->setVisitorId($session["visitor_id"]);
+                $trackOrder->setProductId($item->getProductId());
+                $trackOrder->setQuoteId($quote->getId());
+                $trackOrder->save();
+            }
+        }  catch (Exception $e){
+            Mage::throwException($e->getMessage()); 
+        }
     }
     
+    /**
+     * 
+     * @param Varien_Event_Obeserver $observer
+     */
+    public function loginProcess(Varien_Event_Obeserver $observer){
+        //$customer = $observer->getCustomer();
+    }
+    
+    /**
+     * 
+     * @return array data
+     */
     public function getSessionData(){
         $session = Mage::getSingleton('core/session');
         $data = $session->getVisitorData();

@@ -66,6 +66,15 @@
                     </shoppinginsight_loginprocess>
                 </observers>
             </customer_login>
+            <checkout_type_onepage_save_order_after>
+                <observers>
+                    <shoppinginsight_order>
+                        <type>singleton</type>
+                        <class>shoppinginsight/observer</class>
+                        <method>addOrderAfter</method>
+                    </shoppinginsight_order>
+                </observers>
+            </checkout_type_onepage_save_order_after>
         </events>
     </global>
 </config>

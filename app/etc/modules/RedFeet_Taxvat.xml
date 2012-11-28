@@ -2,7 +2,7 @@
 <config>
     <modules>
         <RedFeet_Taxvat>
-            <active>true</active>
+            <active>false</active>
             <codePool>local</codePool>
         </RedFeet_Taxvat>
     </modules>
