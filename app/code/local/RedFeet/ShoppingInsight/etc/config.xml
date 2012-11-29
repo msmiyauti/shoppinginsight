@@ -80,6 +80,15 @@
                     </shoppinginsight_order>
                 </observers>
             </checkout_type_onepage_save_order_after>
+            <checkout_cart_add_product_complete>
+                <observers>
+                    <shoppinginsight_update_track>
+                        <type>singleton</type>
+                        <class>shoppinginsight/observer</class>
+                        <method>trackUpdate</method>
+                    </shoppinginsight_update_track>
+                </observers>
+            </checkout_cart_add_product_complete>
         </events>
     </global>
     <frontend>

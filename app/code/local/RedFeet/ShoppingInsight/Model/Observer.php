@@ -10,50 +10,65 @@ class RedFeet_ShoppingInsight_Model_Observer extends Mage_Core_Model_Abstract{
      * @param Varien_Event_Observer $observer
      */
     public function addProductView(Varien_Event_Observer $observer){
-        $product = $observer->getProduct();
-        $customer = Mage::getSingleton("customer/session");
-        if($customer->getId()){
-            $cart = Mage::getModel('checkout/cart')->getQuote();
-            
-            $track = Mage::getModel("shoppinginsight/track");
-            $session = $this->getSessionData();
-           
-            $track->getCountProductOrder(1);
-            
-            $track->setVisitorId($session["visitor_id"]);
-            $track->setProductId($product->getId());
-            $track->setCustomerId($session["customer_id"]);
-            $track->setQuoteId($cart->getId());
-            $track->setUrlReferer($session["referer"]);
-            try{
-                $track->save();
-            }  catch (Exception $e){
-//                echo $e->getMessage(); die();
-            }
+        $enable = Mage::getStoreConfig("shoppinginsight/config/active");
+        if($enable){
+            $product = $observer->getProduct();
+            $customer = Mage::getSingleton("customer/session");
+            if($customer->getId()){
+                //$cart = Mage::getModel('checkout/cart')->getQuote();
 
+                $track = Mage::getModel("shoppinginsight/track");
+                $session = $this->getSessionData();
+                $collection = Mage::getModel("shoppinginsight/track")->getCollection();
+
+                $collection->getSelect()
+                        ->where("visitor_id = {$session["visitor_id"]}")
+                        ->where("product_id = {$product->getId()}")
+                        ;
+                $count = $collection->count();
+
+                if(!$count){
+                    $track->setVisitorId($session["visitor_id"]);
+                    $track->setProductId($product->getId());
+                    $track->setCustomerId($session["customer_id"]);
+                    //$track->setQuoteId($cart->getId());
+                    $track->setUrlReferer($session["referer"]);
+                    try{
+                        $track->save();
+                    }  catch (Exception $e){
+        //                echo $e->getMessage(); die();
+                    }
+                }
+            }
+        
         }
     }
+    
+    
     /**
      * 
      * @param Varien_Event_Obeserver $observer
      */
     public function addOrderAfter(Varien_Event_Obeserver $observer){
-        try{
-            $order = $observer->getOrder();
-            $quote = $observer->getQuote();
+        $enable = Mage::getStoreConfig("shoppinginsight/config/active");
+        if($enable){
+            try{
+                $order = $observer->getOrder();
+                $quote = $observer->getQuote();
 
-            $session = $this->getSessionData();
+                $session = $this->getSessionData();
 
-            $items = $order->getAllItems();
-            foreach($items as $item){
-                $trackOrder = Mage::getModel("shoppinginsight/order");
-                $trackOrder->setVisitorId($session["visitor_id"]);
-                $trackOrder->setProductId($item->getProductId());
-                $trackOrder->setQuoteId($quote->getId());
-                $trackOrder->save();
+                $items = $order->getAllItems();
+                foreach($items as $item){
+                    $trackOrder = Mage::getModel("shoppinginsight/order");
+                    $trackOrder->setVisitorId($session["visitor_id"]);
+                    $trackOrder->setProductId($item->getProductId());
+                    $trackOrder->setQuoteId($quote->getId());
+                    $trackOrder->save();
+                }
+            }  catch (Exception $e){
+                Mage::throwException($e->getMessage()); 
             }
-        }  catch (Exception $e){
-            Mage::throwException($e->getMessage()); 
         }
     }
     
@@ -65,6 +80,28 @@ class RedFeet_ShoppingInsight_Model_Observer extends Mage_Core_Model_Abstract{
         //$customer = $observer->getCustomer();
     }
     
+    
+    public function trackUpdate(Varien_Event_Obeserver $observer){
+        $enable = Mage::getStoreConfig("shoppinginsight/config/active");
+        if($enable){
+            $session = $this->getSessionData();
+            $quote = Mage::getModel('checkout/session')->getQuote();
+
+            try{
+                $resource = Mage::getSingleton('core/resource');
+                $table = $resource->getTableName('shoppinginsight/track');
+                $writeConnection = $resource->getConnection('core_write');
+
+                $query = "UPDATE {$table} SET quote_id = '{$quote->getId()}' WHERE quote_id = 0 and visitor_id = "
+                     . (int) $session["visitor_id"];
+
+
+                $writeConnection->query($query);
+            }  catch (Exception $e){
+
+            }
+        }
+    }
     /**
      * 
      * @return array data
