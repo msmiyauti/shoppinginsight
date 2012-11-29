@@ -53,6 +53,8 @@ class RedFeet_ShoppingInsight_Model_Observer extends Mage_Core_Model_Abstract{
         $enable = Mage::getStoreConfig("shoppinginsight/config/active");
         if($enable){
             try{
+                $this->trackUpdate($observer);
+                
                 $order = $observer->getOrder();
                 $quote = $observer->getQuote();
 

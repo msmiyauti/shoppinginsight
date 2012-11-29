@@ -28,30 +28,28 @@ $totals = $this->getTotals();
 $total = $this->getTotal();
 ?>
 <?php if($this->getItems()->getSize()): ?>
-<div class="block block-related">
-    <div class="block-title">
-        <strong><span><?php echo $this->__('Shopping Insight') ?></span></strong>
-    </div>
-    <div class="block-content">
-        <ol class="mini-products-list" id="block-related">
-        <?php foreach($this->getItems() as $_item): ?>
-            <li class="item">
-                <div class="product">
-                    <a href="<?php echo $_item->getProductUrl() ?>" title="<?php echo $this->htmlEscape($_item->getName()) ?>" class="product-image"><img src="<?php echo $this->helper('catalog/image')->init($_item, 'thumbnail')->resize(50) ?>" width="50" height="50" alt="<?php echo $this->htmlEscape($_item->getName()) ?>" /></a>
-                    <div class="product-details">
-                        <p class="product-name"><a href="<?php echo $_item->getProductUrl() ?>"><?php echo $this->htmlEscape($_item->getName()) ?></a></p>
-                        <?php echo $this->getPriceHtml($_item, true, '-related') ?>
-                        <p>
-                            <?php echo $totals[$_item->getId()];?> - 
-                            <?php echo number_format(($totals[$_item->getId()]/$total)* 100,2,",","");?>%
-                        </p>
-                    </div>
+<div class="box-collateral box-up-sell box-shoppinginsight">
+    <!--<div class="block-title">-->
+        <h2><?php echo $this->__('Shopping Insight') ?></h2>
+    <!--</div>-->
+    <ol class="products-list" id="block-shippinginsight">
+    <?php foreach($this->getItems() as $_item): ?>
+        <li class="item">
+            <div class="product">
+                <a href="<?php echo $_item->getProductUrl() ?>" title="<?php echo $this->htmlEscape($_item->getName()) ?>" class="product-image"><img src="<?php echo $this->helper('catalog/image')->init($_item, 'thumbnail')->resize(50) ?>" width="50" height="50" alt="<?php echo $this->htmlEscape($_item->getName()) ?>" /></a>
+                <div class="product-details">
+                    <p class="product-name"><a href="<?php echo $_item->getProductUrl() ?>"><?php echo $this->htmlEscape($_item->getName()) ?></a></p>
+                    <?php echo $this->getPriceHtml($_item, true, '-related') ?>
+                    <p>
+                        <?php echo $totals[$_item->getId()];?> - 
+                        <?php echo number_format(($totals[$_item->getId()]/$total)* 100,2,",","");?>%
+                    </p>
                 </div>
-            </li>
-        <?php endforeach ?>
-        </ol>
+            </div>
+        </li>
+    <?php endforeach ?>
+    </ol>
         <script type="text/javascript">decorateList('block-related', 'none-recursive')</script>
-    </div>
     <script type="text/javascript">
     //<![CDATA[
     $$('.related-checkbox').each(function(elem){

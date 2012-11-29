@@ -89,6 +89,15 @@
                     </shoppinginsight_update_track>
                 </observers>
             </checkout_cart_add_product_complete>
+            <checkout_cart_save_after>
+                <observers>
+                    <shoppinginsight_update_track_cart>
+                        <type>singleton</type>
+                        <class>shoppinginsight/observer</class>
+                        <method>trackUpdate</method>
+                    </shoppinginsight_update_track_cart>
+                </observers>
+            </checkout_cart_save_after>
         </events>
     </global>
     <frontend>
