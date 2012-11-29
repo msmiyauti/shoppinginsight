@@ -29,6 +29,7 @@ if (version_compare(phpversion(), '5.2.0', '<')===true) {
     exit;
 }
 
+
 /**
  * Error reporting
  */
