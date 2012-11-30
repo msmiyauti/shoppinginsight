@@ -70,6 +70,13 @@ class RedFeet_ShoppingInsight_Block_List extends Mage_Catalog_Block_Product_Abst
 
     public function getItems()
     {
-        return $this->_itemCollection;
+        //return $this->_itemCollection;
+        $products = array();
+        foreach($this->_itemCollection->getItems() as $_item){
+            $products[$this->totals[$_item->getId()]] = $_item;
+        }
+        
+        krsort($products);
+        return $products;
     }
 }
